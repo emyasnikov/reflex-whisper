@@ -1,4 +1,7 @@
+import hashlib
 import reflex as rx
+
+from ..models import User
 
 
 class SignupState(rx.State):
@@ -6,6 +9,15 @@ class SignupState(rx.State):
     password: str = ""
 
     def signup(self):
+        with rx.session() as session:
+            user = User(
+                name=self.username,
+                password=hashlib.sha256(self.password.encode()).hexdigest(),
+            )
+            session.add(user)
+            session.commit()
+        self.success_message = "User created successfully!"
+
         return rx.redirect("/")
 
 
