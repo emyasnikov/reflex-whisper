@@ -1,11 +1,22 @@
+import hashlib
 import reflex as rx
+
+from ..models import User
 
 
 class LoginState(rx.State):
-    username: str = ""
-    password: str = ""
-
-    def login(self):
+    @rx.event
+    def login(self, form_data: dict):
+        with rx.session() as session:
+            user = session.exec(
+                User.select().where(User.name == form_data["username"])
+            ).first()
+            if not user or user.password != hashlib.sha256(form_data["password"].encode()).hexdigest():
+                yield rx.toast.error("Invalid username or password!")
+                return rx.redirect("/login")
+            rx.session.set("user_id", user.id)
+            rx.session.set("username", user.name)
+        yield rx.toast.success("Login successful!")
         return rx.redirect("/")
 
 
@@ -16,13 +27,15 @@ def login() -> rx.Component:
             rx.flex(
                 rx.heading("Login"),
                 rx.input(
+                    name="username",
                     placeholder="Username",
                 ),
                 rx.input(
+                    name="password",
                     placeholder="Password",
                     type="password",
                 ),
-                rx.button("Login", on_click=LoginState.login),
+                rx.button("Login", type="submit"),
                 rx.text("Not registered? ", rx.link("Signup", href="/signup")),
                 direction="column",
                 spacing="4",
@@ -33,4 +46,6 @@ def login() -> rx.Component:
             width="300px",
             padding="20px",
         ),
+        on_submit=LoginState.login,
+        reset_on_submit=True,
     )
