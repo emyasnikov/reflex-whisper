@@ -4,9 +4,15 @@ from rxconfig import config
 
 
 class IndexState(rx.State):
-    pass
+    def is_authenticated(self) -> bool:
+        return False
+
+    @rx.event
+    def on_load(self):
+        if not self.is_authenticated():
+            return rx.redirect("/login")
 
 
-@rx.page(route="/")
+@rx.page(on_load=IndexState.on_load)
 def index() -> rx.Component:
-    return rx.text(config.app_name)
+    return rx.box(rx.text(config.app_name))
