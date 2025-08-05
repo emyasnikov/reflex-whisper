@@ -5,21 +5,18 @@ from ..models import User
 
 
 class SignupState(rx.State):
-    password: str = ""
-    username: str = ""
-
     @rx.event
-    def signup(self):
+    def signup(self, form_data: dict):
         with rx.session() as session:
             user = session.exec(
-                User.select().where(User.name==self.username)
+                User.select().where(User.name==form_data["username"])
             ).first()
             if user:
                 yield rx.toast.error("User already exists!")
                 return rx.redirect("/signup")
             user = User(
-                name=self.username,
-                password=hashlib.sha256(self.password.encode()).hexdigest(),
+                name=form_data["username"],
+                password=hashlib.sha256(form_data["password"].encode()).hexdigest(),
             )
             session.add(user)
             session.commit()
@@ -34,13 +31,15 @@ def signup() -> rx.Component:
             rx.flex(
                 rx.heading("Signup"),
                 rx.input(
+                    name="username",
                     placeholder="Username",
                 ),
                 rx.input(
+                    name="password",
                     placeholder="Password",
                     type="password",
                 ),
-                rx.button("Signup", on_click=SignupState.signup),
+                rx.button("Signup", type="submit"),
                 rx.text("Already registered? ", rx.link("Login", href="/login")),
                 direction="column",
                 spacing="4",
@@ -51,4 +50,6 @@ def signup() -> rx.Component:
             width="300px",
             padding="20px",
         ),
+        on_submit=SignupState.signup,
+        reset_on_submit=True,
     )
