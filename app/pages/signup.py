@@ -42,6 +42,7 @@ def signup() -> rx.Component:
                     type="password",
                 ),
                 rx.button("Signup", on_click=SignupState.signup),
+                rx.text("Already registered? ", rx.link("Login", href="/login")),
                 direction="column",
                 spacing="4",
                 width="100%",
