@@ -1,7 +1,7 @@
 import reflex as rx
 
 
-class AuthMixin(rx.State, mixin=True):
+class AuthState(rx.State):
     user_id: int | None = None
     username: str | None = None
 
@@ -9,6 +9,11 @@ class AuthMixin(rx.State, mixin=True):
         return self.user_id is not None
 
     @rx.event
-    def set_user(self, user_id: int, username: str):
+    def on_login(self, user_id: int, username: str):
         self.user_id = user_id
         self.username = username
+
+    @rx.event
+    def on_logout(self):
+        self.user_id = None
+        self.username = None

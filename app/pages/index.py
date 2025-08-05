@@ -1,13 +1,13 @@
 import reflex as rx
 
-from ..mixins import AuthMixin
+from ..states import AuthState
 from rxconfig import config
 
 
-class IndexState(AuthMixin, rx.State):
+class IndexState(rx.State):
     @rx.event
     def on_load(self):
-        if not self.is_authenticated():
+        if not AuthState.is_authenticated():
             return rx.redirect("/login")
 
 
