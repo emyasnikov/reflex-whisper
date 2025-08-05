@@ -1,10 +1,11 @@
 import hashlib
 import reflex as rx
 
+from ..mixins import AuthMixin
 from ..models import User
 
 
-class LoginState(rx.State):
+class LoginState(AuthMixin, rx.State):
     @rx.event
     def login(self, form_data: dict):
         with rx.session() as session:
@@ -14,8 +15,7 @@ class LoginState(rx.State):
             if not user or user.password != hashlib.sha256(form_data["password"].encode()).hexdigest():
                 yield rx.toast.error("Invalid username or password!")
                 return rx.redirect("/login")
-            rx.session.set("user_id", user.id)
-            rx.session.set("username", user.name)
+            self.set_user(user.id, user.name)
         yield rx.toast.success("Login successful!")
         return rx.redirect("/")
 

@@ -1,12 +1,10 @@
 import reflex as rx
 
+from ..mixins import AuthMixin
 from rxconfig import config
 
 
-class IndexState(rx.State):
-    def is_authenticated(self) -> bool:
-        return False
-
+class IndexState(AuthMixin, rx.State):
     @rx.event
     def on_load(self):
         if not self.is_authenticated():
