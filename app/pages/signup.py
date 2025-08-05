@@ -5,18 +5,17 @@ from ..models import User
 
 
 class SignupState(rx.State):
-    error: str = ""
     password: str = ""
-    success: str = ""
     username: str = ""
 
+    @rx.event
     def signup(self):
         with rx.session() as session:
             user = session.exec(
                 User.select().where(User.name==self.username)
             ).first()
             if user:
-                self.error = "User already exists!"
+                yield rx.toast.error("User already exists!")
                 return rx.redirect("/signup")
             user = User(
                 name=self.username,
@@ -24,7 +23,7 @@ class SignupState(rx.State):
             )
             session.add(user)
             session.commit()
-        self.success = "User created successfully!"
+        yield rx.toast.success("User created successfully!")
         return rx.redirect("/")
 
 
@@ -47,8 +46,6 @@ def signup() -> rx.Component:
                 spacing="4",
                 width="100%",
             ),
-            rx.text(SignupState.error, color="red"),
-            rx.text(SignupState.success, color="green"),
             margin="auto",
             margin_top="30vh",
             width="300px",
