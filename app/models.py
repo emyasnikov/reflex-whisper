@@ -8,7 +8,7 @@ class User(rx.Model, table=True):
 
     name: str
     password: str
-    created_at: datetime = rx.Field(default_factory=datetime.now())
+    created_at: datetime = datetime.now()
 
     def __repr__(self):
         return f"User: {self.name}, {self.created_at}"
