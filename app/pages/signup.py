@@ -5,8 +5,10 @@ from ..models import User
 
 
 class SignupState(rx.State):
-    username: str = ""
+    error: str = ""
     password: str = ""
+    success: str = ""
+    username: str = ""
 
     def signup(self):
         with rx.session() as session:
@@ -14,6 +16,7 @@ class SignupState(rx.State):
                 User.select().where(User.name==self.username)
             ).first()
             if user:
+                self.error = "User already exists!"
                 return rx.redirect("/signup")
             user = User(
                 name=self.username,
@@ -21,8 +24,7 @@ class SignupState(rx.State):
             )
             session.add(user)
             session.commit()
-        self.success_message = "User created successfully!"
-
+        self.success = "User created successfully!"
         return rx.redirect("/")
 
 
@@ -44,6 +46,8 @@ def signup() -> rx.Component:
                 spacing="4",
                 width="100%",
             ),
+            rx.text(SignupState.error, color="red"),
+            rx.text(SignupState.success, color="green"),
             margin="auto",
             margin_top="30vh",
             width="300px",
