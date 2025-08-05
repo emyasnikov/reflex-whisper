@@ -1,5 +1,6 @@
 import reflex as rx
 
+from ..components.navbar import navbar
 from ..states import AuthState
 from rxconfig import config
 
@@ -13,4 +14,6 @@ class IndexState(rx.State):
 
 @rx.page(on_load=IndexState.on_load)
 def index() -> rx.Component:
-    return rx.box(rx.text(config.app_name))
+    return rx.box(
+        navbar(config.app_name, {}),
+    )
