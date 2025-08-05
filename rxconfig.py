@@ -7,4 +7,5 @@ config = rx.Config(
     plugins=[
         rx.plugins.TailwindV4Plugin(),
     ],
+    title="AKI NLP",
 )

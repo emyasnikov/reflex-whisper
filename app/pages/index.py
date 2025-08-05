@@ -15,5 +15,5 @@ class IndexState(rx.State):
 @rx.page(on_load=IndexState.on_load)
 def index() -> rx.Component:
     return rx.box(
-        navbar(config.app_name, {}),
+        navbar(config.title, {}),
     )
