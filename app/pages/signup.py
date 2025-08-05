@@ -10,6 +10,11 @@ class SignupState(rx.State):
 
     def signup(self):
         with rx.session() as session:
+            user = session.exec(
+                User.select().where(User.name==self.username)
+            ).first()
+            if user:
+                return rx.redirect("/signup")
             user = User(
                 name=self.username,
                 password=hashlib.sha256(self.password.encode()).hexdigest(),
