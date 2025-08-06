@@ -5,6 +5,7 @@ def link(text: str, url: str) -> rx.Component:
     return rx.link(
         rx.text(text, size="4", weight="medium"),
         href=url,
+        align_self="center",
     )
 
 
@@ -26,6 +27,7 @@ def navbar(title: str, links: dict, on_logout: callable) -> rx.Component:
                     ),
                     align_items="center",
                 ),
+                rx.spacer(),
                 rx.hstack(
                     *[link(text, url) for text, url in links.items()],
                     spacing="5",
@@ -44,7 +46,7 @@ def navbar(title: str, links: dict, on_logout: callable) -> rx.Component:
                     justify="end",
                 ),
                 align_items="center",
-                justify="between",
+                justify="start",
             ),
         ),
         rx.mobile_and_tablet(
