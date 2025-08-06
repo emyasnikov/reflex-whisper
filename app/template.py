@@ -14,6 +14,7 @@ def template(
             config.title,
             {
                 "Home": "/",
+                "Users": "/users",
             },
             AuthState.on_logout,
         ),
