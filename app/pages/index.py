@@ -1,8 +1,7 @@
 import reflex as rx
 
-from ..components.navbar import navbar
 from ..states import AuthState
-from rxconfig import config
+from ..template import template
 
 
 class IndexState(AuthState):
@@ -12,8 +11,7 @@ class IndexState(AuthState):
             return rx.redirect("/login")
 
 
-@rx.page(on_load=IndexState.on_load)
+@rx.page(route="/", on_load=IndexState.on_load)
+@template
 def index() -> rx.Component:
-    return rx.box(
-        navbar(config.title, {}, IndexState.on_logout),
-    )
+    return rx.box()
