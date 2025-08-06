@@ -8,7 +8,7 @@ def link(text: str, url: str) -> rx.Component:
     )
 
 
-def navbar(title: str, links: dict) -> rx.Component:
+def navbar(title: str, links: dict, on_logout: callable) -> rx.Component:
     return rx.box(
         rx.desktop_only(
             rx.hstack(
@@ -39,7 +39,7 @@ def navbar(title: str, links: dict) -> rx.Component:
                         ),
                     ),
                     rx.menu.content(
-                        rx.menu.item("Logout"),
+                        rx.menu.item("Logout", on_click=on_logout),
                     ),
                     justify="end",
                 ),
