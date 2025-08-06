@@ -5,15 +5,15 @@ from ..states import AuthState
 from rxconfig import config
 
 
-class IndexState(rx.State):
+class IndexState(AuthState):
     @rx.event
     def on_load(self):
-        if not AuthState.is_authenticated():
+        if not self.is_authenticated():
             return rx.redirect("/login")
 
 
 @rx.page(on_load=IndexState.on_load)
 def index() -> rx.Component:
     return rx.box(
-        navbar(config.title, {}),
+        navbar(config.title, {}, IndexState.on_logout),
     )
