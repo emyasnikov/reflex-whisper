@@ -47,6 +47,37 @@ def navbar(title: str, links: dict, on_logout: callable) -> rx.Component:
                 justify="between",
             ),
         ),
+        rx.mobile_and_tablet(
+            rx.hstack(
+                rx.hstack(
+                    rx.icon(
+                        "languages",
+                        border_radius="25%",
+                        height="auto",
+                        width="2.25em",
+                    ),
+                    rx.heading(
+                        title,
+                        size="6",
+                        weight="bold",
+                    ),
+                    align_items="center",
+                ),
+                rx.menu.root(
+                    rx.menu.trigger(
+                        rx.icon("menu", size=30),
+                    ),
+                    rx.menu.content(
+                        *[link(text, url) for text, url in links.items()],
+                        rx.menu.separator(),
+                        rx.menu.item("Logout", on_click=on_logout),
+                    ),
+                    justify="end",
+                ),
+                align_items="center",
+                justify="between",
+            ),
+        ),
         bg=rx.color("gray", 3),
         padding="1em",
         width="100%",
