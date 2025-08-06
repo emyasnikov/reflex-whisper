@@ -10,7 +10,13 @@ def template(
     page: Callable[[], rx.Component],
 ) -> rx.Component:
     return rx.vstack(
-        navbar(config.title, {}, AuthState.on_logout),
+        navbar(
+            config.title,
+            {
+                "Home": "/",
+            },
+            AuthState.on_logout,
+        ),
         rx.hstack(
             rx.container(page()),
         ),

@@ -3,7 +3,7 @@ import reflex as rx
 
 def link(text: str, url: str) -> rx.Component:
     return rx.link(
-        rx.text(text, size="md", weight="medium"),
+        rx.text(text, size="4", weight="medium"),
         href=url,
     )
 
