@@ -15,8 +15,16 @@ class UsersState(rx.State):
                 User.select()
             ).all()
 
+    @rx.event
     def on_delete(self, user_id: int):
-        pass
+        with rx.session() as session:
+            user = session.exec(
+                User.select().where(User.id == user_id)
+            ).first()
+            session.delete(user)
+            session.commit()
+            yield rx.toast.info("User deleted.")
+        self.load_users()
 
 
 def show_user(user: User) -> rx.Component:
