@@ -9,7 +9,7 @@ from typing import Callable
 def template(
     page: Callable[[], rx.Component],
 ) -> rx.Component:
-    return rx.vstack(
+    return rx.box(
         navbar(
             config.title,
             {
@@ -18,8 +18,5 @@ def template(
             },
             AuthState.on_logout,
         ),
-        rx.hstack(
-            rx.container(page()),
-        ),
-        width="100%",
+        rx.container(page()),
     )
