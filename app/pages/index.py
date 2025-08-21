@@ -12,6 +12,5 @@ class IndexState(AuthState):
 
 
 @rx.page(route="/", on_load=IndexState.on_load)
-@template
 def index() -> rx.Component:
-    return rx.box()
+    return template(lambda: rx.box(), on_load=IndexState.on_load)
