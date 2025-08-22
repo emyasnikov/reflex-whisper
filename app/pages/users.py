@@ -2,6 +2,7 @@ import reflex as rx
 
 from ..components.table import header_cell
 from ..models import User
+from ..states import AuthState
 from ..template import template
 
 
@@ -45,9 +46,8 @@ def show_user(user: User) -> rx.Component:
 
 
 @rx.page(route="/users")
-@template
 def users() -> rx.Component:
-    return rx.table.root(
+    return template(lambda: rx.table.root(
         rx.table.header(
             rx.table.row(
                 header_cell("user", "Name"),
@@ -57,4 +57,4 @@ def users() -> rx.Component:
         ),
         rx.table.body(rx.foreach(UsersState.users, show_user)),
         on_mount=UsersState.load_users,
-    )
+    ), on_load=AuthState.on_load)
