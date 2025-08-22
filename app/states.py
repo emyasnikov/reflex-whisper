@@ -10,6 +10,11 @@ class AuthState(rx.State):
         return self.logged_in
 
     @rx.event
+    def on_load(self):
+        if not self.is_authenticated():
+            return rx.redirect("/login")
+
+    @rx.event
     def on_login(self, user_id: int, username: str):
         self.logged_in = True
         self.user_id = user_id
