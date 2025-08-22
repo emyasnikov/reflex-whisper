@@ -1,6 +1,5 @@
 import reflex as rx
 
-from ..states import AuthState
 from ..template import template
 
 
@@ -9,5 +8,6 @@ class IndexState():
 
 
 @rx.page(route="/")
+@template
 def index() -> rx.Component:
-    return template(lambda: rx.box(), on_load=AuthState.on_load)
+    return rx.box()
