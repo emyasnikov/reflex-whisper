@@ -5,3 +5,4 @@ __pycache__/
 *.db
 *.py[cod]
 assets/external/
+uploaded_files/
