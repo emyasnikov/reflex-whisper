@@ -2,13 +2,13 @@ import reflex as rx
 
 
 class UploadState(rx.State):
-    current: int = 0
     files: list[str] = []
+    progress: int = 0
     total: int = 0
     uploading: bool = False
 
     @rx.event
-    async def upload(self, files: list[rx.UploadFile]):
+    async def on_upload(self, files: list[rx.UploadFile]):
         for file in files:
             data = await file.read()
             self.total += len(data)
@@ -18,10 +18,10 @@ class UploadState(rx.State):
             self.files.append(file.name)
 
     @rx.event
-    def progress(self, progress: dict):
+    def on_progress(self, progress: dict):
         self.uploading = True
-        self.current = round(progress["progress"] * 100)
-        if self.current >= 100:
+        self.progress = round(progress["progress"] * 100)
+        if self.progress >= 100:
             self.uploading = False
 
 
@@ -34,15 +34,15 @@ def upload_file():
                 "audio/wav",
             },
         ),
-        rx.progress(value=UploadState.current, max=100),
+        rx.progress(value=UploadState.progress, max=100),
         rx.cond(
             ~UploadState.uploading,
             rx.button(
                 "Upload",
-                on_click=UploadState.upload(
+                on_click=UploadState.on_upload(
                     rx.upload_files(
                         upload_id="upload",
-                        on_upload_progress=UploadState.progress,
+                        on_upload_progress=UploadState.on_progress,
                     ),
                 ),
             ),
