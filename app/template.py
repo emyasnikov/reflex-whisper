@@ -11,10 +11,7 @@ def template(page: Optional[Callable[[], rx.Component]] = None, *, on_load: Opti
         return rx.box(
             navbar(
                 config.title,
-                {
-                    "Home": "/",
-                    "Users": "/users",
-                },
+                config.nav_links,
                 AuthState.on_logout,
             ),
             rx.container(page()),
