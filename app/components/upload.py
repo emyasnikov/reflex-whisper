@@ -18,6 +18,11 @@ class UploadState(rx.State):
             self.files.append(file.name)
 
     @rx.event
+    def on_cancel(self):
+        self.uploading = False
+        return rx.cancel_upload("upload")
+
+    @rx.event
     def on_progress(self, progress: dict):
         self.uploading = True
         self.progress = round(progress["progress"] * 100)
@@ -45,6 +50,10 @@ def upload_file():
                         on_upload_progress=UploadState.on_progress,
                     ),
                 ),
+            ),
+            rx.button(
+                "Cancel",
+                on_click=UploadState.on_cancel,
             ),
         ),
         rx.foreach(
